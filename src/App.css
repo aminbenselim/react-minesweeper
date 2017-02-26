@@ -1,3 +1,15 @@
 .App {
   text-align: center;
+  width: 500px;
+  background: darkolivegreen;
+  height:500px;
+  margin: 50px auto;
+
+}
+.cell {
+  width: 40px;
+  height: 40px;
+  background:darkorchid;
+  margin:5px;
+  float:left;
 }
