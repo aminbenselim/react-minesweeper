@@ -9,44 +9,64 @@ class App extends Component {
     super(props);
     this.state = {
       flags: 20,
-      clicked: []
+      Rclicked: [],
+      Lclicked: [],
+      endGame: false
     };
     this.bombCells = getRandomBombCells();
     this.nbs = getNumOfNeighbouringBombs(this.bombCells);
-    //this.onLeftClick = this.onLeftClick().bind(this);
   }
   onRightClick(i, e) {
     e.preventDefault();
-    let clicked = this.state.clicked;
-    if (clicked.indexOf(i) === -1) {
-      if (this.state.flags > 0) {
-        clicked = clicked.concat(i);
-        let newFlags = this.state.flags - 1;
+    if (this.state.Lclicked.indexOf(i) === -1) {
+      let Rclicked = this.state.Rclicked;
+      if (Rclicked.indexOf(i) === -1) {
+        if (this.state.flags > 0) {
+          Rclicked = Rclicked.concat(i);
+          let newFlags = this.state.flags - 1;
+          this.setState({
+            flags: newFlags,
+            Rclicked
+          });
+        }
+      } else {
+        Rclicked.splice(Rclicked.indexOf(i), 1);
+        let newFlags = this.state.flags + 1;
         this.setState({
           flags: newFlags,
-          clicked
+          Rclicked
         });
       }
-    } else {
-      clicked.splice(clicked.indexOf(i), 1);
-      let newFlags = this.state.flags + 1;
-      this.setState({
-        flags: newFlags,
-        clicked
-      });
     }
   }
+
+  onLeftClick(i, e) {
+    e.preventDefault();
+    if (this.state.Rclicked.indexOf(i) === -1) {
+      let Lclicked = this.state.Lclicked;
+      if (Lclicked.indexOf(i) === -1) {
+        Lclicked = Lclicked.concat(i);
+        this.setState({
+          Lclicked
+        });
+      }
+    }
+  }
+
   render() {
     let cells = [];
     for (let i = 0; i < 100; i++)
       cells.push(
         <Cell
           key={i}
+          value={this.nbs[i]}
           right={this.onRightClick.bind(this, i)}
+          left={this.onLeftClick.bind(this, i)}
+          flag={this.state.Rclicked.indexOf(i) !== -1}
+          isClicked={this.state.Lclicked.indexOf(i) !== -1}
         >
-        {(this.state.clicked.indexOf(i) !== -1 ) ? 'F' : this.nbs[i]}
+          {this.state.Rclicked.indexOf(i) !== -1 && "F"}
         </Cell>
-  
       );
     return (
       <div className="container">
