@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import Game from './Game'
 
-class App extends React.Component {
+class App extends Component {
   constructor(props) {
     super(props);
     this.newGame = this.newGame.bind(this);

@@ -56,10 +56,10 @@ class Game extends Component {
   onLeftClick(data, e) {
     e.preventDefault();
     if (this.state.Rclicked.indexOf(data.index) === -1) {
-      let revealed = revealNeighbours(data.index, data.neighbours, this.values, []);
+      let revealed = revealNeighbours(data.index, data.neighbours, this.values);
       console.log("rev: "+revealed);
       let Lclicked = this.state.Lclicked;
-      if (revealed.length !== 0)
+      if (Array.isArray(revealed) && revealed.length > 0)
       // eslint-disable-next-line
         revealed.map(val => {
           if (Lclicked.indexOf(val) === -1) {

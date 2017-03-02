@@ -35,17 +35,20 @@ export function getNeighbouringCells(cellNum) {
   return result.filter(val => val < 100 && val > 0);
 }
 export function getNumOfNeighbouringBombs(bombCells, neighbouringCells, i) {
-  if (bombCells.indexOf(i) !== -1) return "B";
-  let result = neighbouringCells.reduce(
-    (acc, neighbour, ind) => {
-      if (bombCells.indexOf(neighbour) !== -1) {
-        return acc + 1;
-      } else
-        return acc;
-    },
-    0
-  );
-  return result;
+  if (bombCells.indexOf(i) !== -1)
+    return "B";
+  else {
+    let result = neighbouringCells.reduce(
+      (acc, neighbour, ind) => {
+        if (bombCells.indexOf(neighbour) !== -1) {
+          return acc + 1;
+        } else
+          return acc;
+      },
+      0
+    );
+    return result;
+  }
 }
 export function getRandomBombCells() {
   let bombCells = [];
@@ -58,20 +61,27 @@ export function getRandomBombCells() {
   return bombCells;
 }
 
-export function revealNeighbours(ind, neighbours, values, revealed) {
-  if (values[ind] !== "B") {
-    let rev = revealed;
-    //if (rev.indexOf(ind) === -1) {
-      rev = rev.concat(ind);
-    
-    if (values[ind] === 0) {
+export function revealNeighbours(ind, neighbours, values) {
+  let revealed = [];
+  let visited = [];
+  function recurse(ind, neighbours, values) {
+    if (values[ind] === "B") {
+    } else if ((visited.indexOf(ind) === -1) && values[ind] === 0) {
+      visited.push(ind);
+      if (revealed.indexOf(ind) === -1) revealed.push(ind);
+      console.log(" 0 neighbour at " + ind);
       let neighs = neighbours[ind];
       for (let j = 0; j < neighs.length; j++) {
-        revealNeighbours(neighs[j], neighbours, values, rev);
+        recurse(neighs[j], neighbours, values);
       }
+    } else {
+      if (revealed.indexOf(ind) === -1) revealed.push(ind);
     }
-    return rev;
+    console.log("revealed " + revealed);
+    return revealed;
   }
+  revealed = recurse(ind, neighbours, values);
+  return revealed;
 }
 /*export function endGame(val) {
   if (val === "B") return true;
