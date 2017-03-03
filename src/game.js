@@ -14,8 +14,8 @@ class Game extends Component {
     super();
     this.state = {
       flags: 20,
-      Rclicked: [],
-      Lclicked: [],
+      flagged: [],
+      clicked: [],
       endGame: false
     };
     this.neighbours = [];
@@ -27,27 +27,26 @@ class Game extends Component {
         getNumOfNeighbouringBombs(this.bombCells, this.neighbours[i], i)
       );
     }
-    console.log(this.values);
   }
   onRightClick(i, e) {
     e.preventDefault();
-    if (this.state.Lclicked.indexOf(i) === -1) {
-      let Rclicked = this.state.Rclicked;
-      if (Rclicked.indexOf(i) === -1) {
+    if (this.state.clicked.indexOf(i) === -1) {
+      let flagged = this.state.flagged;
+      if (flagged.indexOf(i) === -1) {
         if (this.state.flags > 0) {
-          Rclicked = Rclicked.concat(i);
+          flagged = flagged.concat(i);
           let newFlags = this.state.flags - 1;
           this.setState({
             flags: newFlags,
-            Rclicked
+            flagged
           });
         }
       } else {
-        Rclicked.splice(Rclicked.indexOf(i), 1);
+        flagged.splice(flagged.indexOf(i), 1);
         let newFlags = this.state.flags + 1;
         this.setState({
           flags: newFlags,
-          Rclicked
+          flagged
         });
       }
     }
@@ -55,31 +54,42 @@ class Game extends Component {
 
   onLeftClick(data, e) {
     e.preventDefault();
-    if (this.state.Rclicked.indexOf(data.index) === -1) {
+    if (
+      this.state.flagged.indexOf(data.index) === -1 ||
+      this.state.clicked.indexOf(data.index) === -1
+    ) {
       let revealed = revealNeighbours(data.index, data.neighbours, this.values);
-      console.log("rev: "+revealed);
-      let Lclicked = this.state.Lclicked;
-      if (Array.isArray(revealed) && revealed.length > 0)
-      // eslint-disable-next-line
-        revealed.map(val => {
-          if (Lclicked.indexOf(val) === -1) {
-            Lclicked = Lclicked.concat(val);
-          }
-        });
-
+      let clicked = this.state.clicked;
+      if (Array.isArray(revealed) && revealed.length > 0) {
+        let flgd = revealed.reduce(
+          (flgd, val) => {
+            if (clicked.indexOf(val) === -1) {
+              clicked = clicked.concat(val);
+              if (this.state.flagged.indexOf(val) !== -1) {
+                flgd++;
+              }
+            }
+            return flgd;
+          },
+          0
+        );
       this.setState({
-        Lclicked
+        flags: this.state.flags + flgd,
+        clicked
       });
+        console.log(flgd);
+      }
+
+
     }
   }
 
   render() {
     let cells = [];
-          let neighbours = this.neighbours;
+    let neighbours = this.neighbours;
 
-for(let i =0;i<100;i++)  {
-
-   cells.push(
+    for (let i = 0; i < 100; i++) {
+      cells.push(
         <Cell
           key={i}
           value={this.values[i]}
@@ -88,10 +98,10 @@ for(let i =0;i<100;i++)  {
             index: i,
             neighbours
           })}
-          flag={this.state.Rclicked.indexOf(i) !== -1}
-          isClicked={this.state.Lclicked.indexOf(i) !== -1}
+          flag={this.state.flagged.indexOf(i) !== -1}
+          isClicked={this.state.clicked.indexOf(i) !== -1}
         >
-          {this.state.Rclicked.indexOf(i) !== -1 && "F"}
+          {this.state.flagged.indexOf(i) !== -1 && "F"}
         </Cell>
       );
     }

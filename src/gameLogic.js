@@ -69,7 +69,6 @@ export function revealNeighbours(ind, neighbours, values) {
     } else if ((visited.indexOf(ind) === -1) && values[ind] === 0) {
       visited.push(ind);
       if (revealed.indexOf(ind) === -1) revealed.push(ind);
-      console.log(" 0 neighbour at " + ind);
       let neighs = neighbours[ind];
       for (let j = 0; j < neighs.length; j++) {
         recurse(neighs[j], neighbours, values);
@@ -77,7 +76,6 @@ export function revealNeighbours(ind, neighbours, values) {
     } else {
       if (revealed.indexOf(ind) === -1) revealed.push(ind);
     }
-    console.log("revealed " + revealed);
     return revealed;
   }
   revealed = recurse(ind, neighbours, values);
