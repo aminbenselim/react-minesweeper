@@ -22,7 +22,7 @@ class App extends Component {
     return (
       <div>
         <ActiveGame />
-        <button onClick={this.newGame}>RESET GAME</button>
+        <button onClick={this.newGame}>😑</button>
       </div>
     );
   }

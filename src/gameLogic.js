@@ -36,7 +36,7 @@ export function getNeighbouringCells(cellNum) {
 }
 export function getNumOfNeighbouringBombs(bombCells, neighbouringCells, i) {
   if (bombCells.indexOf(i) !== -1)
-    return "B";
+    return "💣";
   else {
     let result = neighbouringCells.reduce(
       (acc, neighbour, ind) => {
@@ -65,7 +65,7 @@ export function revealNeighbours(ind, neighbours, values) {
   let revealed = [];
   let visited = [];
   function recurse(ind, neighbours, values) {
-    if (values[ind] === "B") {
+    if (values[ind] === "💣") {
     } else if ((visited.indexOf(ind) === -1) && values[ind] === 0) {
       visited.push(ind);
       if (revealed.indexOf(ind) === -1) revealed.push(ind);
@@ -82,6 +82,6 @@ export function revealNeighbours(ind, neighbours, values) {
   return revealed;
 }
 /*export function endGame(val) {
-  if (val === "B") return true;
+  if (val === "💣") return true;
   else return false;
 }*/

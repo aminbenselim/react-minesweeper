@@ -97,7 +97,7 @@ class Game extends Component {
           flag={this.state.flagged.indexOf(i) !== -1}
           isClicked={this.state.clicked.indexOf(i) !== -1}
         >
-          {this.state.flagged.indexOf(i) !== -1 && "F"}
+          {this.state.flagged.indexOf(i) !== -1 && "⚑"}
         </Cell>
       );
     }
