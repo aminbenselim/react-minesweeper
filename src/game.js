@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "./App.css";
 import Cell from "./Cell";
 //import game logic
 import {
@@ -73,14 +72,11 @@ class Game extends Component {
           },
           0
         );
-      this.setState({
-        flags: this.state.flags + flgd,
-        clicked
-      });
-        console.log(flgd);
+        this.setState({
+          flags: this.state.flags + flgd,
+          clicked
+        });
       }
-
-
     }
   }
 
@@ -105,10 +101,18 @@ class Game extends Component {
         </Cell>
       );
     }
+    let styles = {
+      textAlign: "center",
+      width: "420px",
+      background: "darkolivegreen",
+      height: "420px",
+      margin: "0 auto",
+      border: "2px solid black"
+    };
     return (
       <div className="container">
         <span> {this.state.flags} </span>
-        <div className="App">
+        <div className="App" style={styles}>
           {cells}
         </div>
       </div>
