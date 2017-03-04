@@ -4,20 +4,27 @@ class Cell extends Component {
   render() {
     let background = (this.props.isClicked) ? 'silver' : 'transparent';
     let color = "";
-    switch (this.props.value % 3) {
+    switch (this.props.value % 5) {
       case 1:
         color = "green";
         break;
       case 2:
         color = "blue";
         break;
-      case 0:
+      case 3:
+        color = "orange";
+        break;
+        case 4:
         color = "red";
+        break;
+        case 0:
+        color = "violet";
         break;
       default:
         color = "";
         break;
     }
+    color = (this.props.flagged) ? '' : color;
     let styles = {
       width: "30px",
       height: "30px",

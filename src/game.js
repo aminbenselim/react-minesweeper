@@ -64,7 +64,7 @@ class Game extends Component {
         this.state.clicked.indexOf(data.index) === -1)
     ) {
       if (this.bombCells.indexOf(data.index) !== -1) {
-        let clicked = revealBombs(this.bombCells,this.state.clicked)
+        let clicked = revealBombs(this.bombCells, this.state.clicked);
         this.setState({
           clicked,
           endGame: true
@@ -112,13 +112,14 @@ class Game extends Component {
             index: i,
             neighbours
           })}
-          flag={this.state.flagged.indexOf(i) !== -1}
+          flagged={this.state.flagged.indexOf(i) !== -1}
           isClicked={this.state.clicked.indexOf(i) !== -1}
         >
           {this.state.flagged.indexOf(i) !== -1 && "⚑"}
         </Cell>
       );
     }
+    const icon = this.state.endGame ? "😕" : "😆";
     const size = Math.sqrt(this.numberOfCells) * 32 + "px";
     let styles = {
       textAlign: "center",
@@ -129,10 +130,22 @@ class Game extends Component {
       border: "2px solid black"
     };
     return (
-      <div className="container">
-        <span> {this.state.flags} </span>
-        <div className="App" style={styles}>
+      <div className="container" style={styles}>
+        <div className="App">
           {cells}
+        </div>
+        <div
+          style={{
+            width: 'inherit',
+            marginTop: "10px",
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "row"
+          }}
+        >
+          <span>flags left: {this.state.flags} </span>
+          <span> {icon} </span>
+          <span> 0 </span>
         </div>
       </div>
     );

@@ -30,12 +30,14 @@ class App extends Component {
     const ActiveGame = this.state.game;
     return (
       <div>
+        <div style={{width:'fit-content', margin:'0 auto'}}>
+        <button onClick={this.newGame.bind(null,this.state.difficulty)}>New Game</button>
         <select name="difficulty" id="difficulty" onChange={this.handleChange}>
           <option value="normal">normal</option>
           <option value="hard">hard</option>
         </select>
+        </div>
         <ActiveGame />
-        <button onClick={this.newGame.bind(null,this.state.difficulty)}>😑</button>
       </div>
     );
   }
