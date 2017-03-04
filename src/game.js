@@ -5,14 +5,15 @@ import {
   getRandomBombCells,
   getNumOfNeighbouringBombs,
   getNeighbouringCells,
-  revealNeighbours
+  revealNeighbours,
+  revealBombs
 } from "./gameLogic";
 
 class Game extends Component {
   constructor(props) {
     super(props);
-    this.numberOfCells = (this.props.difficulty === 'normal') ? 81 : 256;
-    const flags = (this.props.difficulty === 'normal') ? 10 : 50 ;
+    this.numberOfCells = this.props.difficulty === "normal" ? 81 : 256;
+    const flags = this.props.difficulty === "normal" ? 10 : 50;
     this.state = {
       flags,
       flagged: [],
@@ -21,9 +22,11 @@ class Game extends Component {
     };
     this.neighbours = [];
     this.values = [];
-    this.bombCells = getRandomBombCells(flags,this.numberOfCells);
+    this.bombCells = getRandomBombCells(flags, this.numberOfCells);
     for (let i = 0; i < this.numberOfCells; i++) {
-      this.neighbours.push(getNeighbouringCells(i, Math.sqrt(this.numberOfCells)));
+      this.neighbours.push(
+        getNeighbouringCells(i, Math.sqrt(this.numberOfCells))
+      );
       this.values.push(
         getNumOfNeighbouringBombs(this.bombCells, this.neighbours[i], i)
       );
@@ -31,7 +34,7 @@ class Game extends Component {
   }
   onRightClick(i, e) {
     e.preventDefault();
-    if (this.state.clicked.indexOf(i) === -1) {
+    if (!this.state.endGame && this.state.clicked.indexOf(i) === -1) {
       let flagged = this.state.flagged;
       if (flagged.indexOf(i) === -1) {
         if (this.state.flags > 0) {
@@ -56,28 +59,41 @@ class Game extends Component {
   onLeftClick(data, e) {
     e.preventDefault();
     if (
-      this.state.flagged.indexOf(data.index) === -1 ||
-      this.state.clicked.indexOf(data.index) === -1
+      !this.state.endGame &&
+      (this.state.flagged.indexOf(data.index) === -1 ||
+        this.state.clicked.indexOf(data.index) === -1)
     ) {
-      let revealed = revealNeighbours(data.index, data.neighbours, this.values);
-      let clicked = this.state.clicked;
-      if (Array.isArray(revealed) && revealed.length > 0) {
-        let flgd = revealed.reduce(
-          (flgd, val) => {
-            if (clicked.indexOf(val) === -1) {
-              clicked = clicked.concat(val);
-              if (this.state.flagged.indexOf(val) !== -1) {
-                flgd++;
-              }
-            }
-            return flgd;
-          },
-          0
-        );
+      if (this.bombCells.indexOf(data.index) !== -1) {
+        let clicked = revealBombs(this.bombCells,this.state.clicked)
         this.setState({
-          flags: this.state.flags + flgd,
-          clicked
+          clicked,
+          endGame: true
         });
+      } else {
+        let revealed = revealNeighbours(
+          data.index,
+          data.neighbours,
+          this.values
+        );
+        let clicked = this.state.clicked;
+        if (Array.isArray(revealed) && revealed.length > 0) {
+          let flgd = revealed.reduce(
+            (flgd, val) => {
+              if (clicked.indexOf(val) === -1) {
+                clicked = clicked.concat(val);
+                if (this.state.flagged.indexOf(val) !== -1) {
+                  flgd++;
+                }
+              }
+              return flgd;
+            },
+            0
+          );
+          this.setState({
+            flags: this.state.flags + flgd,
+            clicked
+          });
+        }
       }
     }
   }
@@ -103,7 +119,7 @@ class Game extends Component {
         </Cell>
       );
     }
-    const size = Math.sqrt(this.numberOfCells)*32 +  'px';
+    const size = Math.sqrt(this.numberOfCells) * 32 + "px";
     let styles = {
       textAlign: "center",
       width: size,

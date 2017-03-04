@@ -81,7 +81,7 @@ export function revealNeighbours(ind, neighbours, values) {
   revealed = recurse(ind, neighbours, values);
   return revealed;
 }
-/*export function endGame(val) {
-  if (val === "💣") return true;
-  else return false;
-}*/
+export function revealBombs(bombCells, clicked) {
+  bombCells.forEach(cell => clicked.push(cell));
+  return clicked;
+}
