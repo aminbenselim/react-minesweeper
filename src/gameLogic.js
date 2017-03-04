@@ -2,37 +2,37 @@
  * 
  * @param {number} cellNum the number of the cell you want to check its neighbours
  */
-export function getNeighbouringCells(cellNum) {
+export function getNeighbouringCells(cellNum,rLength) {
   let result = [];
-  if (cellNum % 10 === 0) {
+  if (cellNum % rLength === 0) {
     result = result.concat([
       cellNum + 1,
-      cellNum + 10,
-      cellNum + 11,
-      cellNum - 10,
-      cellNum - 9
+      cellNum + rLength,
+      cellNum + rLength+1,
+      cellNum - rLength,
+      cellNum - rLength  + 1
     ]);
-  } else if (cellNum % 10 === 9) {
+  } else if (cellNum % rLength === rLength -1) {
     result = result.concat([
       cellNum - 1,
-      cellNum - 10,
-      cellNum - 11,
-      cellNum + 10,
-      cellNum + 9
+      cellNum - rLength,
+      cellNum - rLength - 1,
+      cellNum + rLength,
+      cellNum + rLength -1
     ]);
   } else {
     result = result.concat([
       cellNum + 1,
-      cellNum + 11,
+      cellNum + rLength + 1,
       cellNum - 1,
-      cellNum - 10,
-      cellNum - 11,
-      cellNum + 10,
-      cellNum + 9,
-      cellNum - 9
+      cellNum - rLength,
+      cellNum - rLength - 1,
+      cellNum + rLength,
+      cellNum + rLength - 1,
+      cellNum - rLength + 1
     ]);
   }
-  return result.filter(val => val < 100 && val > 0);
+  return result.filter(val => val < rLength*rLength && val >= 0);
 }
 export function getNumOfNeighbouringBombs(bombCells, neighbouringCells, i) {
   if (bombCells.indexOf(i) !== -1)
@@ -50,12 +50,12 @@ export function getNumOfNeighbouringBombs(bombCells, neighbouringCells, i) {
     return result;
   }
 }
-export function getRandomBombCells() {
+export function getRandomBombCells(flags, numberOfCells) {
   let bombCells = [];
-  for (let i = 0; i < 20; i++) {
-    let rnd = Math.floor(Math.random() * 100);
+  for (let i = 0; i < flags; i++) {
+    let rnd = Math.floor(Math.random() * numberOfCells);
     while (bombCells.indexOf(rnd) !== -1)
-      rnd = Math.floor(Math.random() * 100);
+      rnd = Math.floor(Math.random() * numberOfCells);
     bombCells.push(rnd);
   }
   return bombCells;

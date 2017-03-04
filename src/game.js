@@ -9,19 +9,21 @@ import {
 } from "./gameLogic";
 
 class Game extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    this.numberOfCells = (this.props.difficulty === 'normal') ? 81 : 256;
+    const flags = (this.props.difficulty === 'normal') ? 10 : 50 ;
     this.state = {
-      flags: 20,
+      flags,
       flagged: [],
       clicked: [],
       endGame: false
     };
     this.neighbours = [];
     this.values = [];
-    this.bombCells = getRandomBombCells();
-    for (let i = 0; i < 100; i++) {
-      this.neighbours.push(getNeighbouringCells(i));
+    this.bombCells = getRandomBombCells(flags,this.numberOfCells);
+    for (let i = 0; i < this.numberOfCells; i++) {
+      this.neighbours.push(getNeighbouringCells(i, Math.sqrt(this.numberOfCells)));
       this.values.push(
         getNumOfNeighbouringBombs(this.bombCells, this.neighbours[i], i)
       );
@@ -84,7 +86,7 @@ class Game extends Component {
     let cells = [];
     let neighbours = this.neighbours;
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < this.numberOfCells; i++) {
       cells.push(
         <Cell
           key={i}
@@ -101,11 +103,12 @@ class Game extends Component {
         </Cell>
       );
     }
+    const size = Math.sqrt(this.numberOfCells)*32 +  'px';
     let styles = {
       textAlign: "center",
-      width: "420px",
-      background: "darkolivegreen",
-      height: "420px",
+      width: size,
+      background: "grey",
+      height: size,
       margin: "0 auto",
       border: "2px solid black"
     };

@@ -2,32 +2,38 @@ import React, { Component } from "react";
 
 class Cell extends Component {
   render() {
+    let background = (this.props.isClicked) ? 'silver' : 'transparent';
     let color = "";
     switch (this.props.value % 3) {
       case 1:
-        color = "red";
+        color = "green";
         break;
       case 2:
         color = "blue";
         break;
+      case 0:
+        color = "red";
+        break;
       default:
-        color = "green";
+        color = "";
         break;
     }
     let styles = {
-      width: "40px",
-      height: "40px",
-      background: "darkgrey",
+      width: "30px",
+      height: "30px",
+      background,
       border: "1px solid black",
       float: "left",
-      display: 'flex',
-    justifyContent:'center',
-    aligncontent:'center',
-    flexDirection:'column',
-      //lineHeight: "40px",
+      display: "flex",
+      justifyContent: "center",
+      aligncontent: "center",
+      flexDirection: "column",
       color
     };
-
+    let toRender = '';
+    if(this.props.isClicked) {
+      toRender = (this.props.value === 0) ? '' : this.props.value;
+    } else toRender = this.props.children;
     return (
       <div
         className="cell"
@@ -35,7 +41,7 @@ class Cell extends Component {
         onContextMenu={this.props.right}
         onClick={this.props.left}
       >
-        {this.props.isClicked ? this.props.value : this.props.children}
+        {toRender}
       </div>
     );
   }
