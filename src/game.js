@@ -137,15 +137,16 @@ class Game extends Component {
         <div
           style={{
             width: 'inherit',
-            marginTop: "10px",
-            display: "flex",
+            height: '40px',
+           display: "flex",
             justifyContent: "space-between",
+            alignItems: "center",
             flexDirection: "row"
           }}
         >
-          <span>flags left: {this.state.flags} </span>
-          <span> {icon} </span>
-          <span> 0 </span>
+          <span style={{flexGrow:1}}>flags left: {this.state.flags} </span>
+          <span style={{flexGrow:1}}> {icon} </span>
+          <span style={{flexGrow:1}}> 0 </span>
         </div>
       </div>
     );

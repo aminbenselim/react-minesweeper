@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - "node"
+  
+deploy:
+  provider: surge
+  project: ./build/
+  domain: react-mineweeper.surge.sh
+
+  
